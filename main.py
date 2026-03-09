@@ -13,8 +13,8 @@ def process_data(raw_file_path):
     Returns:
         tuple: (list_of_10_hours, grouped_data_dict)
     """
-    # Load raw data
-    df = pd.read_excel(raw_file_path, sheet_name="Sheet0")
+    # Load raw data (using first sheet by default to avoid Sheet0 vs Sheet1 naming issues)
+    df = pd.read_excel(raw_file_path, sheet_name=0)
 
     # Extract unique hours and sort them (assuming format 'YYYY-MM-DD HH:MM:SS')
     unique_times = sorted(df['Begin Time'].unique())
@@ -42,6 +42,9 @@ def process_data(raw_file_path):
     if "ORA_2G_TCH Availability(%)" not in df_filtered.columns:
         if "ORA_2G_TCH Availability Normal TRXs" in df_filtered.columns:
             kpis["Average of ORA_2G_TCH Availability(%)"] = ("ORA_2G_TCH Availability Normal TRXs", "mean")
+            # If using "Normal TRXs" which is often 1.0 (100%), adjust scale if it seems it is between 0 and 1.
+            # In raw data, normal TRXs might be just 1 (meaning 100%). Let's scale it to 100 if it's <= 1.
+            df_filtered.loc[:, "ORA_2G_TCH Availability Normal TRXs"] = df_filtered["ORA_2G_TCH Availability Normal TRXs"].apply(lambda x: x * 100 if x <= 1.0 else x)
         else:
             df_filtered["ORA_2G_TCH Availability(%)"] = 100
 
@@ -76,25 +79,26 @@ def apply_formatting(val, kpi_name):
     except ValueError:
         return "FFFFFF"
 
-    # Green: 92D050 (approx), Red: FF0000, Faded Red: F08080 or similar.
+    # Template specific colors
+    # Green (vert): C6EFCE
+    # Rose/Pink (rose): FFC7CE
     # From description:
-    # Availability: >=98.5 Green, else faded red
-    # CSSR CS: >= 98.5 Green, else faded red (described as < 98.5 rouge delave et vert au cas contraire)
-    # Call drop CS: <= 0.7 Green, else red (> 0.7)
+    # Availability: >= 98.5 vert, else rose
+    # CSSR CS: >= 98.5 vert, else rose
+    # Call drop CS: <= 0.7 vert, else rose
     # Traffic CS: always white
     # SDCCH / TCH BLOCKING: always white
 
-    green = "00B050" # "92D050"
-    faded_red = "FFC7CE" # Or "FF9999"
-    red = "FF0000"
+    green = "C6EFCE"
+    rose = "FFC7CE"
     white = "FFFFFF"
 
     if "Availability" in kpi_name:
-        return green if val >= 98.5 else faded_red
+        return green if val >= 98.5 else rose
     elif "CSSR" in kpi_name:
-        return green if val >= 98.5 else faded_red
+        return green if val >= 98.5 else rose
     elif "Call_Drop" in kpi_name:
-        return green if val <= 0.7 else red
+        return green if val <= 0.7 else rose
     else:
         return white
 

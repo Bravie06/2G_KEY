@@ -31,9 +31,9 @@ A desktop application designed to automate the generation of 2G KPI Excel report
 6. A success message will appear indicating your output file has been created in the destination folder.
 
 ## Color Codes Logic
-- **Availability**: >= 98.5 (Green), < 98.5 (Faded Red)
-- **CSSR CS**: >= 98.5 (Green), < 98.5 (Faded Red)
-- **Call Drop CS**: <= 0.7 (Green), > 0.7 (Red)
+- **Availability**: >= 98.5 (Vert/Green), < 98.5 (Rose/Pink)
+- **CSSR CS**: >= 98.5 (Vert/Green), < 98.5 (Rose/Pink)
+- **Call Drop CS**: <= 0.7 (Vert/Green), > 0.7 (Rose/Pink)
 - **Traffic CS, SDCCH Blocking, TCH Blocking**: White (No color)
 
 ---
