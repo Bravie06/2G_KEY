@@ -35,7 +35,10 @@ Everything runs locally on your machine with absolutely no data sent to external
   - All other metrics are given a standard white background.
 - Values are uniformly truncated to two decimal places.
 
-## Troubleshooting
+## Troubleshooting / Offline Installation
 
-- **Python not recognized:** If running `run.bat` results in "Python is not installed or not added to PATH", ensure you have installed Python and ticked the box to add it to your PATH during installation.
-- **Missing modules:** Ensure you use the `run.bat` script rather than clicking `app.py` directly, as the bat file manages dependency installation in the virtual environment.
+- **"Python is not installed or not added to PATH"**: Ensure you have installed Python and ticked the box to add it to your PATH during installation.
+- **"WinError 10013" or PIP connection errors**: Your corporate firewall or proxy is blocking `pip` from downloading packages automatically. If this happens:
+    - **Option 1 (Proxy):** If your company uses a proxy, run this command in your command prompt: `pip install -r requirements.txt --proxy=http://your-proxy-address:port`
+    - **Option 2 (Manual download):** Download the `.whl` files for `pandas`, `openpyxl`, and `customtkinter` manually on a machine with internet access. Move them to your machine and install them locally using `pip install pandas...whl`.
+    - **Option 3 (Global Python):** Ask your IT admin to install `pandas`, `openpyxl`, and `customtkinter` in your system's global Python environment. The `run.bat` now attempts to inherit system-wide packages (using `--system-site-packages`).
