@@ -79,9 +79,9 @@ def generate_report(file_path, event_name):
     ws = wb.active
     ws.title = "Sheet1"
 
-    # Define styles
-    green_fill = PatternFill(start_color="92D050", end_color="92D050", fill_type="solid") # Green
-    pink_fill = PatternFill(start_color="FF99CC", end_color="FF99CC", fill_type="solid") # Rose / Pink
+    # Define styles matching template exactly
+    green_fill = PatternFill(start_color="C6EFCE", end_color="C6EFCE", fill_type="solid") # Template Green (FFC6EFCE)
+    pink_fill = PatternFill(start_color="FFC7CE", end_color="FFC7CE", fill_type="solid") # Template Rose/Pink (FFFFC7CE)
     white_fill = PatternFill(start_color="FFFFFF", end_color="FFFFFF", fill_type="solid")
 
     thin_border = Border(
@@ -158,6 +158,9 @@ def generate_report(file_path, event_name):
                 cell.alignment = center_aligned
 
             current_row += 1
+
+        # Add empty row to separate site blocks, keeping aesthetics as in the template
+        current_row += 1
 
     # Adjust column widths
     ws.column_dimensions['A'].width = 45
